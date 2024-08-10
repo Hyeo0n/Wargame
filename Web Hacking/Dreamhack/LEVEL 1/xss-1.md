@@ -4,7 +4,7 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <h1> Dreamhack "xss-1.md"  Write-UP</h1>
+    <h1> Dreamhack "xss-1"  Write-UP</h1>
 </body>
 <br>
 <br>
