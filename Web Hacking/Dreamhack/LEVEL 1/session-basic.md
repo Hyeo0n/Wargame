@@ -103,7 +103,6 @@ HTML 문서를 보니, # default account: guest / guest 라고 쓰여있는 주�
 
 </br>
 
-![image](https://github.com/user-attachments/assets/097cc45d-84d4-456d-82a3-ad7b865ef545)
 
 ![image](https://github.com/user-attachments/assets/8c583a08-ec00-4c78-b85f-73fc31731135)
 
