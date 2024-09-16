@@ -67,9 +67,9 @@ xss-1과 똑같은 코드였다.
 
 저번 xss-1에는 1이라는 알림창을 뜨게 하기 위해
 
-<script>alert(1)</script> 이 있었는데,
+`<script>alert(1)</script>` 이 있었는데,
 
-이번에는 <script>alert(1)</script>이 있는데도,
+이번에는 `<script>alert(1)</script>`이 있는데도,
 
 이 스크립트 태그가 작동하지 않는 것을 확인할 수 있다. 
 
@@ -84,7 +84,7 @@ xss-1과 똑같은 코드였다.
  <br>
 </br>
 
-이를 참고하여, vuln 페이지 주소창에 <svg onload="alert('1')">을
+이를 참고하여, vuln 페이지 주소창에 `<svg onload="alert('1')">`을
 
 뒤에 이어붙이니까,
 
