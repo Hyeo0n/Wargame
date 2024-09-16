@@ -65,7 +65,7 @@ xss-1과 똑같은 코드였다.
  <br>
 </br>
 
-저번 xsss-1에는 1이라는 알림창을 뜨게 하기 위해
+저번 xss-1에는 1이라는 알림창을 뜨게 하기 위해
 
 <script>alert(1)</script> 이 있었는데,
 
@@ -75,18 +75,14 @@ xss-1과 똑같은 코드였다.
 
 스크립트 태그 대신에 다른 것을 입력해야 할 것 같다.
 
-이를 우회해서 할 수 있는 방법이 뭐가 있을까하고 찾아본 결과,
+이를 우회해서 할 수 있는 방법이 뭐가 있을까하고 인터넷을 찾아본 결과,
 
-밑에 링크에서 스크립트 태그 대신에,
+해당 스크립트 태그 대신에,
 
-<svg onload=>를 사용하는 것을 발견하였다.
+<svg onload=>를 사용하는 경우들을 발견하였다.
 
  <br>
 </br>
-
-https://hackerone.com/reports/415484 Shopify disclosed on HackerOne: Stored xss # Description : WAF cut html tages but when put before tages we can bypass it :) . #Step to reproduce : 1-Open your store account 2-Navigate to https://xxx.myshopify.com/admin/
-
-noirstar.tistory.com
 
 이를 참고하여, vuln 페이지 주소창에 <svg onload="alert('1')">을
 
