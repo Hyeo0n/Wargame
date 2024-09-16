@@ -80,7 +80,6 @@ HTML 문서를 보니, # default account: guest / guest 라고 쓰여있는 주�
 
 ![image](https://github.com/user-attachments/assets/e8891217-b714-4ae6-b343-9714d4630223)
 
-![image](https://github.com/user-attachments/assets/51cf73d4-4cde-46e8-8f41-d8b8b78e248a)
 
 쿠키값을 admin으로 바꾼 후, 접속 사이트에서 새로고침해보니까, admin으로 로그인되면서, Flag 값이 출력되었다!
 
