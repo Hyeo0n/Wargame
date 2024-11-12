@@ -4,7 +4,7 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <h1> webhacking.kr "Old-31"  Write-UP</h1>
+    <h1> Lord of SQL Injection "orc"  Write-UP</h1>
 </body>
 <br>
 <br>
