@@ -130,32 +130,225 @@ _start:
 ```
 
 위와 같은 형식으로 작성해보았다.
+<br>
+
+</br>
 
 ## push 코드 설명
 
 ![image](https://github.com/user-attachments/assets/3f026b90-c4f6-41ee-96b6-a86086130b2b)
 
 1. `push 0X0`
+   
   : 문자열의 끝을 나타내는 NULL 바이트를 스택에 푸시하는 부분이라고 한다. 이는 문자열의 끝을 알리기 위해 필요하다고 한다.
 
 2. `mov rax, 0x676e6f6f6f6f6f6f`
+
   : 레지스터 rax에 flag가 저장된 주소 문자열의 일부인 "oooooong" 을 저장하는 부분이다. 이 문자열은 8바이트로 표현되며, 스택에 푸시될 때 역순으로 저장된다고 한다.
 
 3. `push rax`
+   
   : rax에 저장된 "oooooong" 을 스택에 푸시하여 저장하는 부분이다.
 
 4. `mov rax, 0x6c5f73695f656d61`
+   
   : 문자열 "ame_is_l"을 rax에 저장하는 부분이다.
 
 5. `push rax`
+   
   : rax에 저장된 "ame_is_l"을 스택에 푸시한다,
 
 6. `mov rax, 0x6e5f67616c662f63`
+   
   : 문자열 "c/flag_n"을 rax에 저장한다,
 
 7. `push rax`
+   
   : rax에 저장된 "c/flag_n"을 스택에 푸시한다.
 
 8. `mov rax, 0x697361625f6c6c65`
+   
   : 문자열 "ell_basi"를 rax에 저장한다.
+
+9. `push rax`
+    
+  : rax에 저장된 "ell_basi"를 스택에 푸시한다,
+
+10. `mov rax, 0x68732f656d6f682f`
+    
+  : 문자열 "/home/sh"을 rax에 저장한다.
+
+11. `push rax`
+    
+  : rax에 저장된 "/home/sh"을 스택에 푸시한다.
+
+<br>
+
+</br>
+
+이 부분의 코드는 스택에 파일 경로 /home/shell_basic/flag_name_is_loooooong을 푸시한 결과를 만드는 부분이다.
+
+스택에서 데이터를 읽을 떄는 가장 마지막에 푸시된 데이터부터 읽기 때문에 경로는 올바른 순서로 메모리에 저장된다.
+
+*역순으로 푸시하는 이유 : 스택의 LIFO 특성 때문에, 문자열을 스택에 역순으로 푸시해야 메모리 내에서 문자열이 올바른 순서로 저장됨.
+
+<br>
+
+</br>
+
+## open 코드 설명
+
+![image](https://github.com/user-attachments/assets/8753d397-83a1-4ac7-8c44-71250ec43cda)
+
+1. `mov rdi, rsp`
+   
+  : 파일 경로의 시작 주소를 rdi 레지스터에 저장한다.
+  
+  +) rsp는 스택 포인터를 가리키므로, 앞서 스택에 푸시된 파일 경로의 시작 주소가 rdi에 설정됨
+    
+  +) rdi는 open() 시스템 콜의 첫 번째 인자로, 파일 경로로 전달함
+
+2. `xor rsi, rsi`
+
+   : rsi를 0으로 설정함. xor 명령어를 사용하여 더 빠르게 0으로 설정 가능
+
+   +) rsi는 open()의 두 번째 인자로, RD_ONLY (읽기 전용 모드)를 나타냄
+   
+3. `xor rdx, rdx`
+
+   : rdx를 0으로 설정
+
+   +) rdx는 open() 세 번째 인자로, 파일을 생성할 때의 모드를 나타냄.
+
+4. `mov rax, 2`
+
+   : rax에 2를 저장함
+
+   +) rax는 시스템 콜 번호를 지정하는 레지스터 -> 2가 들어가면 open() 시스템 콜 호출
+
+5. `syscall`
+
+   : 시스템 콜을 호출하는 명령어
+
+   +) open() 시스템 콜이 실행되고, 반환값이 rax에 저장됨
+
+     -> 호출이 성공하면, 열린 파일의 파일 디스크립터가 반환됨
+
+<br>
+
+</br>
+
+즉, 이 부분은 open() 시스템 콜을 호출하여 파일을 여는 부분이다. 어셈블리 코드에서는 시스템 콜의 인자를 레지스터에 설정하고, 시스템 콜 번호를 rax에 설정한 후 syscall 명령어를 통해 호출한다고 한다. 
+파일이 성공으로 열리면, 파일 디스크립터는 rax에 반환되며, 이후 다른 시스템 콜에서 이 파일 디스크립터를 사용하여 파일을 읽거나 조작할 수 있다.
+
+<br>
+
+</br>
+
+## read 코드 설명
+
+![image](https://github.com/user-attachments/assets/d4059bfe-3376-4a6b-b701-c0f8408235cb)
+
+1. `mov rdi, rax`
+
+   : open() 시스템 콜의 반환값(파일 디스크립터)이 rax에 저장되어 있다.
+
+   +) read() 시스템 콜의 첫 번째 인자는 읽어올 파일의 디스크립터를 지정해야 하므로, 이 값을 rdi로 이동하여 설정
+
+2. `sub rsp, 0x30`
+
+   : 스택 포인터 rsp를 48바이트(0x30)만큼 감소시켜 버퍼 공간을 확보한다.
+
+   -> 이 과정은 스택에 메모리 공간을 마련하여 read()가 데이터를 읽어와 저장할 공간을 만듦
+
+3. `mov rsi, rsp`
+
+   : rsi에 rsp 값을 저장하여 read() 시스템 콜의 두 번째 인자로 버퍼의 주소를 설정한다.
+
+    ->  버퍼는 앞서 sub rsp, 0x30을 통해 확보된 스택 공간을 가리킴
+
+4. `mov rdx, 0x30`
+
+   : rdx에 0x30(48)을 저장하여 read() 시스템 콜의 세 번째 인자로 읽을 바이트 수를 설정한다.
+
+    -> 이 코드는 파일에서 최대 48바이트를 읽음
+
+5. `mov rax, 0`
+
+   : rax에 0을 저장하여 read() 시스템 콜 번호를 설정한다.
+
+6. `syscall`
+
+   : read() 시스템 콜을 호출한다
+
+   -> 호출 성공시, 읽은 바이트 수가 rax에 저장되고, rsp가 가리키는 버퍼에 파일 데이터가 저장됨.
+
+<br>
+
+</br>
+
+즉, 이 부분은 열린 파일의 내용을 읽고, 데이터를 버퍼에 저장하는 과정을 수행한다. 
+열린 파일로부터 최대 48바이트를 읽어 스택의 버퍼에 저장한다. 
+이 과정은 파일의 내용을 메모리로 읽어 들여 프로그램이 후속 작업을 할 수 있게 준비하는 단계이다.
+
+<br>
+
+</br>
+
+## write, exit 부분
+
+![image](https://github.com/user-attachments/assets/7b6a4ad2-70f6-4bff-8bf7-f1775e234d69)
+
+1. `mov rdi, 1`
+   
+   : rdi에 1을 저장하여 write() 시스템 콜의 첫 번째 인자로 설정한다,
+
+2. `mov rax, 1`
+
+   : rax에 1을 저장하여 write() 시스템 콜 번호를 설정한다.
+
+3. `syscall`
+
+   : write() 시스템 콜을 호출하여 rsi에 설정된 버퍼 내용을 표준 출력으로 출력한다.
+
+   -> rdi는 출력 대상(여기서는 1, 즉 stdout), rsi는 버퍼의 주소, rdx는 출력할 바이트 수
+
+<br>
+
+</br>
+
+1. `xor rdi, rdi`
+   
+   : rdi를 0으로 설정한다.
+
+2. `mov rax, 0x3c`
+
+   : rax에 0x3c 를 저장하여 exit() 시스템 콜 번호를 설정한다,
+
+3. `syscall`
+
+   : exit() 시스템 콜을 호출하여 프로그램을 종료한다.
+
+<br>
+
+</br>
+
+즉, 이 부분들은 write() 시스템 콜을 호출하여 표준 출력으로 버퍼 내용을 출력하고, 프로그램을 종료하는 exit() 시스템 콜을 호출하는 과정이다. 
+<br>
+
+</br>
+<br>
+
+</br>
+
+이제 이를 쉘 코드로 추출하기 위해, 컴파일 / 링크를 하고 추출해보려고 한다. 
+
+![image](https://github.com/user-attachments/assets/441c0ac0-4b4e-4f86-8e8a-73c0c1cfa174)
+
+![image](https://github.com/user-attachments/assets/54003647-1297-4812-a44a-3a27b6cbf926)
+
+![image](https://github.com/user-attachments/assets/af6562db-775d-4c61-8c29-1cbd1487b5f2)
+
+\x6a\x00\x48\xb8\x6f\x6f\x6f\x6f\x6f\x6f\x6e\x67\x50\x48\xb8\x61\x6d\x65\x5f\x69\x73\x5f\x6c\x50\x48\xb8\x63\x2f\x66\x6c\x61\x67\x5f\x6e\x50\x48\xb8\x65\x6c\x6c\x5f\x62\x61\x73\x69\x50\x48\xb8\x2f\x68\x6f\x6d\x65\x2f\x73\x68\x50\x48\x89\xe7\x48\x31\xf6\xb0\x3d\x12\xb8\x02\x00\x00\x0f\x05\x48\xc7\x48\x31\xec\x30\x48\xb9\xe8\xba\x30\x00\x00\x00\xb8\x00\x00\x00\x0f\x05\xbf\x01\x00\x00\x00\xb8\x01\x00\x00\x0f\x05\x48\x31\xff\xb8\x3c\x00\x00\x00\x00\x0f\x05
+
 
