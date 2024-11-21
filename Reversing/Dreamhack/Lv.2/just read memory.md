@@ -91,3 +91,97 @@ else
     puts("Wrong");
 }` 부분을 통해, 사용자가 입력한 각 문자의 값을 10으로 나눈 나머지를 순차적으로 계산하여서 flag 값으로 출력하는 것으로 보인다.
 
+그래서, 이 문자열을 알아내는 방식으로 문제 풀이를 진행해야 될 것 같다.
+
+하지만, 현실적으로 64자리의 랜덤된 문자열을 알아낼 방법은 딱히 없어 보이고, 
+
+프로그램을 조금 조작을 하여서, 입력된 값을 무조건 맞는 값으로 처리하게 만들어야 할 것으로 보인다.  
+
+<br>
+
+</br> 
+
+![image](https://github.com/user-attachments/assets/e7d165fe-d344-4f6a-b58c-dca6ab528b71)
+
+코드를 살펴보니, 사용자 입력 값 (v4)과 연결 리스트에서 읽어온 문자열을 비교하는 부분을 보니, 
+<br>
+
+</br> 
+
+```
+mov eax, [rbp+var_C]  ; v9 (현재 비교 중인 위치)
+cdqe                  ; 확장 (32비트를 64비트로 변환)
+movzx eax, byte ptr [rbp+rax+var_70]  ; 사용자 입력의 현재 문자
+mov edx, al           ; edx에 사용자 입력 문자 저장
+mov rax, [rbp+var_18] ; 연결 리스트 노드
+movzx eax, byte ptr [rax] ; 연결 리스트 노드의 문자
+cmp edx, eax          ; 사용자 입력 문자와 목표 문자열 문자 비교
+jz  short loc_12DE    ; 같으면 loc_12DE로 이동
+
+```
+
+`mov rax, [rbp+var_18] ; 연결 리스트 노드`, `movzx eax, byte ptr [rax] ; 연결 리스트 노드의 문자
+` 부분을 통해, 연결 리스트의 각 노드들의 데이터를 불러오는 것을 확인할 수 있었다.
+그 후, `cmp edx, eax` 부분을 통해, 각 데이터들을 비교하면서 검증하는 것으로 보인다.
+<br>
+
+</br> 
+
+![image](https://github.com/user-attachments/assets/6c22a74b-f2ca-43b6-b8dd-a8d0700fad97)
+
+위에서 비교 검증을 거친 후, 모든 데이터가 일치하면, `jz short loc_12DE`를 통해, loc_12DE로 이동하는 것으로 보인다.
+
+<br>
+
+</br> 
+
+일단 연결 리스트 데이터 값들을 불러오게 한 후에 뒤에 있는
+비교하는 cmp 부분을 지우고, 
+
+```
+lea rdi, [rbx+rax+var_70]  ; 사용자 입력 위치의 주소를 rdi에 저장
+mov [rdi], al              ; 목표 문자열 문자를 사용자 입력에 복사
+jz  short loc_12DE
+```
+
+부분으로 수정해보려고 한다. `lea rdi`를 통해 사용자 입력 위치의 주소를 rdi 레지스터에 저장해놓고,
+
+`mov [rdi], al`를 통해 불러온 연결 리스트에 값을 rdi, 즉 사용자 입력 위치에다가 저장하게끔 수정해보았다.
+
+그 후, loc_12DE로 이동하는 부분을  `jz` 로 바꾸어 항상 loc_12DE로 이동하게끔 수정한다.
+
+<br>
+
+</br> 
+
+![image](https://github.com/user-attachments/assets/1a1e3d71-e487-4bb6-9ff5-c5e56299de48)
+ 
+<br>
+
+</br> 
+
+![image](https://github.com/user-attachments/assets/7763759c-a413-4ef2-91c0-e76a91c3c3a1)
+
+현재 IDA Freeware를 사용하고 있기 떄문에, Hxd에서 따로 해당 hex 값을 직접 수정해주었다.
+
+<br>
+
+</br>
+
+![image](https://github.com/user-attachments/assets/8505c2aa-3de3-4e07-bd86-dc93c48a8b36)
+
+이를 kali에서 실행시켜보니, 아무거나 입력값을 넣어도 Correct이 출력되면서 플래그 값을 얻을 수 있었다!
+
+<br>
+
+</br>
+
+```
+DH{7078981632989894389654921898749418541874549056189474343058581690}
+```
+<br>
+
+</br>
+
+![image](https://github.com/user-attachments/assets/731fc951-a78e-4bc4-bbde-dd3974d65e18)
+
