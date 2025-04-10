@@ -4,7 +4,7 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <h1> SUNINATAS "Game 30"  Write-UP</h1>
+    <h1> LMS Network Forensic puzaale contest "Puzzle #1: Ann’s Bad AIM"  Write-UP</h1>
 </body>
 <br>
 <br>
