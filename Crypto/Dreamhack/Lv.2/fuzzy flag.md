@@ -77,5 +77,5 @@ print("\n[+] Flag:", bytes(min_vals).decode())
 </br>
 
 ```
-YISF{my_two_s0lutions :_ One_where_thf_avesage_Of_rand0m_numbers_remains_constant,_and_an0ther_where_the_upper_and_1ower_bounds_of_random_numbers'remain_constant.What_metiod_d1d_you_use?}
+YISF{my_two_s0luti0ns:_0ne_where_the_average_0f_rand0m_numbers_remains_constant,_and_an0ther_where_the_upper_and_1ower_bounds_of_random_numbers_remain_c0nstant.What_method_d1d_you_use?}
 ```
